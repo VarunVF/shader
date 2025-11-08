@@ -11,7 +11,7 @@ uniform vec3 fogColor;		// vanilla fog color
 in vec2 texcoord;
 
 #define DRAW_FOG
-const float FOG_DENSITY = 5.0;
+#define FOG_DENSITY 5.0 // [1.0 2.0 3.0 4.0 5.0]
 
 
 #include "lib/util.glsl"
