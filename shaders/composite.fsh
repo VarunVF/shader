@@ -42,6 +42,7 @@ const int TIME_MAX      = 24000;
 
 
 #include "lib/util.glsl"
+#include "lib/constants.glsl"
 
 
 bool isNightTime() {
@@ -66,7 +67,7 @@ vec3 getCelestialLight() {
 
 void main() {
 	color = texture(colortex0, texcoord);
-	color.rgb = pow(color.rgb, vec3(2.2));
+	color.rgb = pow(color.rgb, vec3(GAMMA));
 
 	float depth = texture(depthtex0, texcoord).r;
 	if (depth == 1.0) {

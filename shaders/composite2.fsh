@@ -4,7 +4,7 @@ uniform sampler2D colortex0;
 
 in vec2 texcoord;
 
-#define CONTRAST 1.0 // [0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2 1.3]
+#define CONTRAST 1.0 // [0.5 0.6 0.7 0.8 0.9 1.0 1.05 1.1 1.2 1.3]
 
 /* RENDERTARGETS: 0 */
 layout(location = 0) out vec4 color;

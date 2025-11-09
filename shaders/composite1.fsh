@@ -15,6 +15,7 @@ in vec2 texcoord;
 
 
 #include "lib/util.glsl"
+#include "lib/constants.glsl"
 
 /* RENDERTARGETS: 0 */
 layout(location = 0) out vec4 color;
@@ -22,8 +23,10 @@ layout(location = 0) out vec4 color;
 
 // Exponential falloff based on Beer-Lambert Law
 // Expect dist in [0.0, 1.0]
+// Returns factor in [0.0, 1.0]
 float getFogFactor(float dist) {
-	return exp(-FOG_DENSITY * (1.0 - dist));
+	float factor = exp(-FOG_DENSITY * (1.0 - dist));
+	return clamp(factor, 0.0, 1.0);
 }
 
 void main() {
@@ -36,9 +39,9 @@ void main() {
 
 	vec3 NDCPos = vec3(texcoord.xy, depth) * 2.0 - 1.0;
 	vec3 viewPos = projectAndDivide(gbufferProjectionInverse, NDCPos);
-
+	
 #ifdef DRAW_FOG
 	float fogFactor = getFogFactor(length(viewPos)/far);
-	color.rgb = mix(color.rgb, pow(fogColor, vec3(2.2)), clamp(fogFactor, 0.0, 1.0));
+	color.rgb = mix(color.rgb, pow(fogColor, vec3(GAMMA)), fogFactor);
 #endif
 }
