@@ -7,6 +7,8 @@ uniform float alphaTestRef = 0.1;
 in vec2 lmcoord;
 in vec4 glcolor;
 
+const vec3 cloudsColor = vec3(1.0);
+
 /* RENDERTARGETS: 0 */
 layout(location = 0) out vec4 color;
 
@@ -15,4 +17,6 @@ void main() {
 	if (color.a < alphaTestRef) {
 		discard;
 	}
+
+	// color.rgb = cloudsColor;
 }
