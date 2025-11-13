@@ -32,6 +32,8 @@ const vec3 sunlightColor = vec3(1.0);
 const vec3 moonlightColor = vec3(0.03, 0.2, 0.25);
 const vec3 ambientColor = vec3(0.1);
 
+#define DRAW_SHADOWS
+
 const float SHADOW_BIAS = 0.001;
 
 const int SUNRISE_TIME  = 23215;
@@ -81,6 +83,9 @@ void main() {
 	vec3 lightVector = normalize(shadowLightPosition);
 	vec3 worldLightVector = mat3(gbufferModelViewInverse) * lightVector;
 
+	vec3 celestialBodyLight = getCelestialLight();
+
+#ifdef DRAW_SHADOWS
 	vec3 NDCPos = vec3(texcoord.xy, depth) * 2.0 - 1.0;
 	vec3 viewPos = projectAndDivide(gbufferProjectionInverse, NDCPos);
 	vec3 feetPlayerPos = (gbufferModelViewInverse * vec4(viewPos, 1.0)).xyz;
@@ -92,13 +97,14 @@ void main() {
 
 	// depth comparison to determine if pixel is in shadow
 	float shadow = step(shadowScreenPos.z, texture(shadowtex0, shadowScreenPos.xy).r);
-
-	vec3 celestialBodyLight = getCelestialLight();
+	float sunlightStrength = shadow;
+#else
+	float sunlightStrength = lightmap.g;
+#endif // DRAW_SHADOWS
 
 	vec3 blocklight = lightmap.r * blocklightColor;
 	vec3 skylight = lightmap.g * getSkyLightColor();
 	vec3 ambient = ambientColor;
-	vec3 sunlight = celestialBodyLight * clamp(dot(worldLightVector, normal), 0.0, 1.0) * shadow;
-
+	vec3 sunlight = celestialBodyLight * clamp(dot(worldLightVector, normal), 0.0, 1.0) * sunlightStrength;
 	color.rgb *= blocklight + skylight + ambient + sunlight;
 }

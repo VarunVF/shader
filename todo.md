@@ -9,6 +9,7 @@
 ## Improvements
 
 **Shadows**
-- [ ] Provide toggle option for shadows as it can cause lags
+- [ ] Night is too bright
 - [ ] Quality of shadows is constant rather than dependent on depth
 - [ ] Apperance of rain can be customised
+- [X] Provide toggle option for shadows as it can cause lags
