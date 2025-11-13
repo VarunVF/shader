@@ -3,6 +3,8 @@
 uniform sampler2D lightmap;
 uniform sampler2D gtexture;
 
+uniform vec4 entityColor;
+
 uniform float alphaTestRef = 0.1;
 
 in vec2 lmcoord;
@@ -23,4 +25,6 @@ void main() {
 
 	lightmapData = vec4(lmcoord, 0.0, 1.0);
 	encodedNormal = vec4(normal * 0.5 + 0.5, 1.0);
+
+	color.rgb = mix(color.rgb, entityColor.rgb, entityColor.a);
 }

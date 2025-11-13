@@ -4,8 +4,6 @@
 
 uniform sampler2D gtexture;
 
-uniform vec4 entityColor;
-
 uniform float alphaTestRef = 0.1;
 
 in vec2 texcoord;
