@@ -3,8 +3,9 @@
 ## Bugs
 
 - [ ] Sunlight/skylight not being smoothly lerped correectly
+- [ ] Fix apperance of lead (likely fixed by adding `gbuffers_basic`)
 - [X] Entity tint not applied correctly eg. when hurting entities
-
+- [X] Fix incorrect drawing of shadows
 
 ## Improvements
 
