@@ -28,6 +28,7 @@ layout(location = 0) out vec4 color;
 
 const vec3 blocklightColor = vec3(1.0, 0.5, 0.08);
 const vec3 skylightColor = vec3(0.05, 0.15, 0.3);
+const vec3 nightSkylightColor = vec3(0.0);
 const vec3 sunlightColor = vec3(1.0);
 const vec3 moonlightColor = vec3(0.03, 0.2, 0.25);
 const vec3 ambientColor = vec3(0.1);
@@ -50,20 +51,14 @@ bool isNightTime() {
 	return SUNSET_TIME < worldTime && worldTime < SUNRISE_TIME;
 }
 
-// 0.0 at noon, 1.0 at midnight
-float getTimeLerpFactor() {
-	int time = worldTime;
-	time = (time + TIME_MAX) % TIME_MAX;
-	float factor = float(time) / float(TIME_MAX);
-	return clamp(factor, 0.0, 1.0);
+vec3 getSkylightColor() {
+	float factor = getTimeLerpFactor(worldTime);
+	return mix(nightSkylightColor, skylightColor, factor);
 }
 
-vec3 getSkyLightColor() {
-	return mix(skylightColor, vec3(0.0), getTimeLerpFactor());
-}
-
-vec3 getCelestialLight() {
-	return mix(sunlightColor, moonlightColor, getTimeLerpFactor());
+vec3 getSunlightColor() {
+	float factor = getTimeLerpFactor(worldTime);
+	return mix(moonlightColor, sunlightColor, factor);
 }
 
 void main() {
@@ -99,8 +94,8 @@ void main() {
 #endif // DRAW_SHADOWS
 
 	vec3 blocklight = lightmap.r * blocklightColor;
-	vec3 skylight = lightmap.g * getSkyLightColor();
+	vec3 skylight = lightmap.g * getSkylightColor();
 	vec3 ambient = ambientColor;
-	vec3 sunlight = getCelestialLight() * clamp(dot(worldLightVector, normal), 0.0, 1.0) * sunlightStrength;
+	vec3 sunlight = getSunlightColor() * clamp(dot(worldLightVector, normal), 0.0, 1.0) * sunlightStrength;
 	color.rgb *= blocklight + skylight + ambient + sunlight;
 }
